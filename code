@@ -1,0 +1,90 @@
+#include <iostream>
+using namespace std;
+struct node{
+    int info;
+    struct node *link;
+};
+typedef struct node node;
+void display_linked_list(int n,node *start){
+    node *temp=start;
+    for(int i=0;i<n;i++){
+        cout<<temp->info<<endl;
+        temp=temp->link;
+    }
+}
+node *search_loc(node *start, node *last,int value){
+    node *save=start, *loc=NULL, *ptr=start->link;
+    if(start==NULL){
+        loc=NULL;
+        return loc;
+    }
+    else if(value<start->info){
+        loc=NULL;
+        return loc;
+    }
+    else{
+        while(ptr!=NULL){
+                    if(value<ptr->info){
+                        loc=save;
+                        return loc;
+                    }
+                    else{
+                        save=ptr;
+                        ptr=ptr->link;
+                    }
+        }
+        return save;
+    }
+}
+node *insertion(node *start, node *last, node *loc, int value){
+    node *p=(node *)malloc(sizeof(node));
+    p->info=value;
+    if(start==NULL){
+        start=last=p;
+        return start;
+    }
+    else if(loc==NULL){
+        p->link=start;
+        start=p;
+        return start;
+    }
+    else if(loc==last){
+        p->link=NULL;
+        last->link=p;
+        last=p;
+        return start;
+    }
+    else{
+        p->link=loc->link;
+        loc->link=p;
+        return start;
+    }
+}
+
+int main() {
+    int n, value;
+    cout<<"Enter number of elements to be appended in linked list: "<<endl;
+    cin>>n;
+    node *head=NULL;
+    node *newelement, *start, *loc;
+    for(int i=0;i<n;i++){
+        newelement=(node *)malloc(sizeof(node));
+        cout<<"Enter "<< i+1<< " element of linked list: "<<endl;
+        cin>>newelement->info;
+        newelement->link=NULL;
+        if(head==NULL){
+            start=head=newelement;
+        }
+        else{
+            head->link=newelement;
+            head=newelement;
+        }
+    }
+    display_linked_list(n,start);
+    cout<<"Enter value to be inserted: "<<endl;
+    cin>>value;
+    loc= search_loc(start, head,value);
+    start= insertion(start,head,loc,value);
+    display_linked_list(n+1,start);
+    return 0;
+}
